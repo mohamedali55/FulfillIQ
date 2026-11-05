@@ -1,0 +1,56 @@
+{
+  "database": "fulfilliq",
+  "organization": "acme-corp",
+  "order_count": 1000000,
+  "days": 30,
+  "reports": {
+    "order_summary": {
+      "iterations": 3,
+      "median_ms": 1050.412,
+      "min_ms": 997.178,
+      "max_ms": 1883.581,
+      "samples_ms": [
+        997.178,
+        1050.412,
+        1883.581
+      ]
+    },
+    "warehouse_comparison": {
+      "iterations": 3,
+      "median_ms": 1010.609,
+      "min_ms": 986.224,
+      "max_ms": 1018.263,
+      "samples_ms": [
+        1010.609,
+        1018.263,
+        986.224
+      ]
+    },
+    "top_products": {
+      "iterations": 3,
+      "median_ms": 81110.854,
+      "min_ms": 78561.283,
+      "max_ms": 83300.905,
+      "samples_ms": [
+        83300.905,
+        78561.283,
+        81110.854
+      ]
+    },
+    "fulfillment": {
+      "iterations": 3,
+      "median_ms": 30177.666,
+      "min_ms": 30111.645,
+      "max_ms": 43691.419,
+      "samples_ms": [
+        43691.419,
+        30177.666,
+        30111.645
+      ]
+    }
+  },
+  "query_plans": {
+    "warehouse_recent_orders": "Sort  (cost=33386.55..33557.54 rows=68394 width=77) (actual time=103.204..112.244 rows=65659 loops=1)\n  Sort Key: orders_order.created_at DESC\n  Sort Method: external merge  Disk: 6432kB\n  Buffers: shared hit=2064 read=2420, temp read=804 written=806\n  ->  Nested Loop  (cost=0.57..24852.47 rows=68394 width=77) (actual time=0.121..65.425 rows=65659 loops=1)\n        Buffers: shared hit=2064 read=2420\n        ->  Index Scan using orders_warehouse_organization_id_3b240b96 on orders_warehouse  (cost=0.14..8.16 rows=1 width=8) (actual time=0.042..0.044 rows=1 loops=1)\n              Index Cond: (organization_id = 1)\n              Filter: (id = 3)\n              Rows Removed by Filter: 4\n              Buffers: shared hit=4 read=1\n        ->  Index Scan using orders_order_warehouse_id_110eb3b3 on orders_order  (cost=0.42..24160.37 rows=68394 width=77) (actual time=0.077..57.258 rows=65659 loops=1)\n              Index Cond: (warehouse_id = 3)\n              Filter: (created_at >= '2026-10-06 13:58:37.392121+00'::timestamp with time zone)\n              Rows Removed by Filter: 134108\n              Buffers: shared hit=2060 read=2419\nPlanning:\n  Buffers: shared hit=57 read=3\nPlanning Time: 2.594 ms\nExecution Time: 131.995 ms",
+    "warehouse_delivered_orders": "Sort  (cost=27878.89..27972.17 rows=37309 width=77) (actual time=58.944..63.006 rows=36234 loops=1)\n  Sort Key: orders_order.created_at DESC\n  Sort Method: external merge  Disk: 3600kB\n  Buffers: shared hit=4481, temp read=450 written=451\n  ->  Nested Loop  (cost=0.57..25045.79 rows=37309 width=77) (actual time=0.021..36.793 rows=36234 loops=1)\n        Buffers: shared hit=4481\n        ->  Index Scan using orders_warehouse_organization_id_3b240b96 on orders_warehouse  (cost=0.14..8.16 rows=1 width=8) (actual time=0.008..0.010 rows=1 loops=1)\n              Index Cond: (organization_id = 1)\n              Filter: (id = 3)\n              Rows Removed by Filter: 4\n              Buffers: shared hit=2\n        ->  Index Scan using orders_order_warehouse_id_110eb3b3 on orders_order  (cost=0.42..24664.54 rows=37309 width=77) (actual time=0.012..32.804 rows=36234 loops=1)\n              Index Cond: (warehouse_id = 3)\n              Filter: ((created_at >= '2026-10-06 13:58:37.392121+00'::timestamp with time zone) AND ((status)::text = ANY ('{delivered,returned}'::text[])))\n              Rows Removed by Filter: 163533\n              Buffers: shared hit=4479\nPlanning:\n  Buffers: shared hit=51\nPlanning Time: 0.309 ms\nExecution Time: 85.173 ms"
+  }
+}

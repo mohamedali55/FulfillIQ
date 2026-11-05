@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local databases and generated files
+db.sqlite3
+db.sqlite3-*
+*.sqlite3
+*.sqlite3-*
+media/
+staticfiles/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# Test and coverage output
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
